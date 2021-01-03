@@ -1,47 +1,58 @@
-#!BPY
-# ***** BEGIN GPL LICENSE BLOCK *****
-#
-# Script copyright (C) Kay Bothfeld
-#
-# This program is free software; you can redistribute it and/or
-# modify it under the terms of the GNU General Public License
-# as published by the Free Software Foundation; either version 2
-# of the License, or (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software Foundation,
-# Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-#
-# ***** END GPL LICENCE BLOCK *****
+bl_info = {
+        "name": "Flip Animation",
+        "description": "Performs a copy and paste flipped pose on all frames of currently selected action.",
+        "author": "Kay Bothfeld, Vitalii Shmorhun",
+        "version": (1, 0),
+        "blender": (2, 90, 0),
+        "location": "View3D > Pose Mode > Tool Shelf",
+        "warning": "", # used for warning icon and text in add-ons panel
+        "wiki_url": "",
+        "tracker_url": "",
+        "category": "Animation"
+        }
 
 import bpy
-
-bl_info = {
-    "name": "Flip Animation",
-    "description": "Performs a copy and paste flipped pose on all frames of currently selected action.",
-    "author": "Kay Bothfeld",
-    "version": (0,3),
-    "blender": (2,5,8),
-    "location": "View3D > Pose Mode > Tool Shelf",
-    "warning": "", # used for warning icon and text in addons panel 
-    "wiki_url": "http://www.scio.de/en/blog-a-news/scio-development-blog-en/entry/flip-animation-add-on-for-mirroring-keyframes-in-blender",
-    "link": "http://www.scio.de/en/blog-a-news/scio-development-blog-en/entry/flip-animation-add-on-for-mirroring-keyframes-in-blender",
-    "tracker_url": "http://www.scio.de/",
-    "category": "Animation"
-    }
+from bpy.types import (
+    Operator,
+    Menu,
+    Panel,
+    UIList,
+    PropertyGroup
+)
+from bpy.props import (
+    StringProperty,
+    IntProperty,
+    PointerProperty,
+    EnumProperty
+)
 
 class FlipAnimationPanel(bpy.types.Panel) :
-    bl_space_type = "VIEW_3D"
-    bl_region_type = "TOOLS"
-    bl_context = "posemode"
-    bl_label = "Flip Animation"
- 
-    def draw(self, context) :
+    bl_label = 'Flip Animation'
+    bl_idname = "VIEW3D_PT_flip_animation"
+    bl_space_type = 'VIEW_3D'    
+    bl_region_type = 'UI'
+    bl_category = 'Animation'
+    
+    def draw(self, context):
+        scene = context.scene
+        layout = self.layout
+
+        #ui_params = bpy.context.area.python_panel
+        # ui_params = bpy.context.window_manager.python_panel
+        
+        # col = layout.column()
+        # row = col.row(align=True)        
+        # row.prop(ui_params, "code_line", text="Code")        
+        # row = col.row(align=True)
+        # row.operator('system.exec_python', text="Run Line").set_mode = "line"
+
+        # col.separator()
+
+        # row = col.row(align=True)
+        # row = row.split(factor=0.8)
+        # row.prop_search(ui_params, "text_name", bpy.data, "texts", text="Script:")
+        # row.operator('system.exec_python', text = "Run Script").set_mode = "text"
+
         col = self.layout.column(align = True)
         col.prop(context.scene, "flip_animation_append_mode")
         if context.scene.flip_animation_append_mode:
@@ -373,7 +384,6 @@ def unregister() :
     del bpy.types.Scene.flip_animation_end_frame
     bpy.types.VIEW3D_MT_pose.remove(add_to_menu)
  
-if __name__ == "__main__" :
-    register()
-    
 
+if __name__ == '__main__':
+    register()
